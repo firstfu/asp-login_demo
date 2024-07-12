@@ -19,7 +19,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LogoutPath = "/Account/Logout";
     });
 
-// 自定義授權規則
+// 自定義授權規則-1
 // builder.Services.AddAuthorization(options =>
 // {
 //     options.AddPolicy("UsernamePolicy", policy =>
@@ -28,6 +28,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 //     });
 // });
 // builder.Services.AddSingleton<IAuthorizationHandler, UsernameAuthorizationHandler>();
+
+// 自定義授權規則-2
+// builder.Services.AddAuthorization(options =>
+// {
+//     options.AddPolicy("over18", policy =>
+//     {
+//         policy.RequireClaim("lineId", "18", "30");
+//     });
+// });
 
 
 var app = builder.Build();

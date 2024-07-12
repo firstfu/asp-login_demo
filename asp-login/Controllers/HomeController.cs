@@ -18,9 +18,14 @@ public class HomeController : Controller
     }
 
     [Authorize]
+    // [Authorize(Roles = "Admin")]
+    // [Authorize(Policy = "over18")]
     // [Authorize(Policy = "UsernamePolicy")]
     public IActionResult Index()
     {
+        var roleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+        var lineIds = User.Claims.Where(c => c.Type == "lineId").Select(c => c.Value).ToList();
+        ViewData["Role"] = roleClaim;
         return View();
     }
 

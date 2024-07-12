@@ -6,21 +6,15 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-public class User
-{
-    public int Id { get; set; }
-    public required string Username { get; set; }
-    public required string Password { get; set; }
-}
+
 
 public class AccountController : Controller
 {
 
-
-    private static List<User> Users = new List<User>
-    {
-        new User { Id = 1, Username = "test", Password = "password" }
-    };
+    // private static List<User> Users = new List<User>
+    // {
+    //     new User { Id = 1, Username = "test", Password = "password" }
+    // };
 
     [HttpGet]
     public IActionResult Login()
@@ -31,30 +25,44 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
-        var user = Users.Find(u => u.Username == model.Username && u.Password == model.Password);
 
+        // Console.WriteLine("CookieAuthenticationDefaults.AuthenticationScheme: " + CookieAuthenticationDefaults.AuthenticationScheme);
 
-        if (user != null)
+        if (!ModelState.IsValid)
+        {
+            // 如果模型狀態無效，返回登錄視圖並顯示錯誤信息
+            return View(model);
+        }
+
+        if (model.Username != "test" || model.Password != "password")
+        {
+            ModelState.AddModelError(string.Empty, "用戶名或密碼錯誤。");
+            return View(model);
+        }
+
+        if (model.Username == "test" && model.Password == "password")
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.Name, "test"),
+                new Claim(ClaimTypes.NameIdentifier, "001"),
+                new Claim(ClaimTypes.Role, "Admin"),
+                // 自定義聲明key-value
+                new Claim("lineId", "14"),
+                new Claim("lineId", "18"),
+                new Claim("lineId", "30")
             };
-
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = true
             };
-
-
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
             return RedirectToAction("Index", "Home");
         }
 
-        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        return View(model);
+        return View();
+
     }
 
     public async Task<IActionResult> Logout()
