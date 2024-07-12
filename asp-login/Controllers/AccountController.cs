@@ -34,13 +34,13 @@ public class AccountController : Controller
             return View(model);
         }
 
-        if (model.Username != "test" || model.Password != "password")
+        if (model.Username != "test" || model.Password != "123456")
         {
             ModelState.AddModelError(string.Empty, "用戶名或密碼錯誤。");
             return View(model);
         }
 
-        if (model.Username == "test" && model.Password == "password")
+        if (model.Username == "test" && model.Password == "123456")
         {
             var claims = new List<Claim>
             {

@@ -5,6 +5,7 @@ using asp_login.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace asp_login.Controllers;
 
@@ -23,6 +24,8 @@ public class HomeController : Controller
     // [Authorize(Policy = "UsernamePolicy")]
     public IActionResult Index()
     {
+
+        // Console.WriteLine("CookieAuthenticationDefaults.AuthenticationScheme: " + CookieAuthenticationDefaults.AuthenticationScheme);
         var roleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
         var lineIds = User.Claims.Where(c => c.Type == "lineId").Select(c => c.Value).ToList();
         ViewData["Role"] = roleClaim;
