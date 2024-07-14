@@ -1,5 +1,4 @@
 @model LoginViewModel
-
 <!-- <form asp-action="Login" method="post">
   <div>
     <label asp-for="Username"></label>
@@ -12,7 +11,7 @@
   <button type="submit">登錄頁面</button>
 </form> -->
 
-<div class="container">
+<div class="container" id="app">
   <form class="w-50 d-flex flex-column justify-content-center align-items-center mx-auto" method="post" asp-action="Login">
     <div class="mb-3 w-100">
       <label for="Username" class="form-label">帳號</label>
@@ -25,8 +24,70 @@
       <input name="Password" type="Password" class="form-control" id="exampleInputPassword1" />
       @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
     </div>
-    <div class="w-100 d-flex justify-content-start">
-      <button type="submit" class="btn btn-primary">登錄</button>
+    <div class="w-100 d-flex justify-content-start gap-3">
+      <div class="row w-100">
+        <!-- 登錄 -->
+        <div class="col-12 col-md-6 d-flex justify-content-center align-items-cente mb-3 mb-md-0">
+          <button type="submit" class="btn btn-primary normal-btn">登錄</button>
+        </div>
+        <!-- line登入 -->
+        <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+          <div class="line-btn" v-on:click="onLineLogin">Line登入</div>
+        </div>
+      </div>
     </div>
+    <div class="line-login-error">@Html.ValidationSummary(true, "", new { @class = "text-danger custom-validation-summary" })</div>
   </form>
 </div>
+
+@section Scripts{
+<script type="module">
+  const { createApp, ref } = Vue;
+
+  createApp({
+    setup() {
+      const count = ref(0);
+
+      //   line登入
+      const onLineLogin = () => {
+        console.log("line登入");
+        window.location.href = "/Account/LoginWithLine";
+      };
+      return {
+        count,
+        onLineLogin,
+      };
+    },
+  }).mount("#app");
+</script>
+}
+
+<style>
+  .line-btn {
+    background-color: #04c755;
+    color: white;
+    border-radius: 6px;
+    padding: 8px 20px;
+    border: none;
+    width: 120px;
+    text-align: center;
+  }
+  .normal-btn {
+    background-color: #007bff;
+    color: white;
+    border-radius: 6px;
+    padding: 8px 20px;
+    border: none;
+    width: 120px;
+  }
+
+  .line-login-error {
+    font-size: 18px;
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    font-weight: bold;
+    align-items: center;
+    padding: 16px 0;
+  }
+</style>
